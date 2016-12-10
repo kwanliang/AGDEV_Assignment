@@ -65,10 +65,10 @@ void CPlayerInfo::Init(void)
 	primaryWeapon = new CPistol();
 	primaryWeapon->Init();
     // Set the laser blaster as the secondary weapon
-    //secondaryWeapon = new CLaserBlaster();
-    //secondaryWeapon->Init();
-    secondaryWeapon = new CGrenadeThrow();
+    secondaryWeapon = new CLaserBlaster();
     secondaryWeapon->Init();
+    //secondaryWeapon = new CGrenadeThrow();
+    //secondaryWeapon->Init();
 }
 
 // Returns true if the player is on ground
