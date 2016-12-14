@@ -127,6 +127,7 @@ private:
 
 	FPSCamera* attachedCamera;
 
+	Vector3 offset;
 	CWeaponInfo* primaryWeapon;
 	CWeaponInfo* secondaryWeapon;
 };

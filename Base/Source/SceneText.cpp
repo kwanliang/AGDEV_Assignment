@@ -164,6 +164,16 @@ void SceneText::Init()
     MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(1.0f, 0.64f, 0.0f), 1.0f);
     MeshBuilder::GetInstance()->GenerateQuad("GRIDMESH", Color(1.0f, 1.0f, 1.0f), 10.f);
 
+	MeshBuilder::GetInstance()->GenerateCube("hitbox", Color(1.0f, 0.0f, 0.0f), 1.0f);
+
+	MeshBuilder::GetInstance()->GenerateOBJ("Asteroid1", "OBJ//Asteroids//Asteroid1.obj");
+	MeshBuilder::GetInstance()->GetMesh("Asteroid1")->textureID = LoadTGA("Image//Asteroids//Asteroid.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("Asteroid2", "OBJ//Asteroids//Asteroid2.obj");
+	MeshBuilder::GetInstance()->GetMesh("Asteroid2")->textureID = LoadTGA("Image//Asteroids//Asteroid.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("Base1", "OBJ//Base//base.obj");
+	MeshBuilder::GetInstance()->GetMesh("Base1")->textureID = LoadTGA("Image//Base//base.tga");
+
     // Set up the Spatial Partition and pass it to the EntityManager to manage
     CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);
     //CSpatialPartition::GetInstance()->SetMesh("GRIDMESH");
@@ -178,39 +188,40 @@ void SceneText::Init()
     aCube->SetCollider(true);
     aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
     aCube->InitLOD("cube", "sphere", "cubeSG");
+	aCube->ShowAABB = true;
 
-    // Add the pointer to this new entity to the Scene Graph
-    CSceneNode* theNode = CSceneGraph::GetInstance()->AddNode(aCube);
-    if (theNode == NULL)
-        cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-
-    GenericEntity* anotherCube = Create::Entity("cube", Vector3(-20.0f, 1.1f, -20.0f));
-    anotherCube->SetCollider(true);
-    anotherCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
-    CSceneNode* anotherNode = theNode->AddChild(anotherCube);
-    if (anotherCube == NULL)
-        cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-
-    GenericEntity* baseCube = Create::Asset("cube", Vector3(0.0f, 0.0f, 0.0f));
-    CSceneNode* baseNode = CSceneGraph::GetInstance()->AddNode(baseCube);
-
-    CUpdateTransformation* baseMtx = new CUpdateTransformation();
-    baseMtx->ApplyUpdate(1.0f, 0.0f, 0.0f, 1.0f);
-    baseMtx->SetSteps(-60, 60);
-    baseNode->SetUpdateTransformation(baseMtx);
-
-    GenericEntity* childCube = Create::Asset("cubeSG", Vector3(0.0f, 0.0f, 0.0f));
-    CSceneNode* childNode = baseNode->AddChild(childCube);
-    childNode->ApplyTranslate(0.0f, 1.0f, 0.0f);
-
-    GenericEntity* grandchildCube = Create::Asset("cubeSG", Vector3(0.0f, 0.0f, 0.0f));
-    CSceneNode* grandchildNode = childNode->AddChild(grandchildCube);
-    grandchildNode->ApplyTranslate(0.0f, 0.0f, 1.0f);
-
-    CUpdateTransformation* aRotateMtx = new CUpdateTransformation();
-    aRotateMtx->ApplyUpdate(1.0f, 0.0f, 0.0f, 1.0f);
-    aRotateMtx->SetSteps(-120, 60);
-    grandchildNode->SetUpdateTransformation(aRotateMtx);
+    //// Add the pointer to this new entity to the Scene Graph
+    //CSceneNode* theNode = CSceneGraph::GetInstance()->AddNode(aCube);
+    //if (theNode == NULL)
+    //    cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
+	//
+    //GenericEntity* anotherCube = Create::Entity("cube", Vector3(-20.0f, 1.1f, -20.0f));
+    //anotherCube->SetCollider(true);
+    //anotherCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+    //CSceneNode* anotherNode = theNode->AddChild(anotherCube);
+    //if (anotherCube == NULL)
+    //    cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
+	//
+    //GenericEntity* baseCube = Create::Asset("cube", Vector3(0.0f, 0.0f, 0.0f));
+    //CSceneNode* baseNode = CSceneGraph::GetInstance()->AddNode(baseCube);
+	//
+    //CUpdateTransformation* baseMtx = new CUpdateTransformation();
+    //baseMtx->ApplyUpdate(1.0f, 0.0f, 0.0f, 1.0f);
+    //baseMtx->SetSteps(-60, 60);
+    //baseNode->SetUpdateTransformation(baseMtx);
+	//
+    //GenericEntity* childCube = Create::Asset("cubeSG", Vector3(0.0f, 0.0f, 0.0f));
+    //CSceneNode* childNode = baseNode->AddChild(childCube);
+    //childNode->ApplyTranslate(0.0f, 1.0f, 0.0f);
+	//
+    //GenericEntity* grandchildCube = Create::Asset("cubeSG", Vector3(0.0f, 0.0f, 0.0f));
+    //CSceneNode* grandchildNode = childNode->AddChild(grandchildCube);
+    //grandchildNode->ApplyTranslate(0.0f, 0.0f, 1.0f);
+	//
+    //CUpdateTransformation* aRotateMtx = new CUpdateTransformation();
+    //aRotateMtx->ApplyUpdate(1.0f, 0.0f, 0.0f, 1.0f);
+    //aRotateMtx->SetSteps(-120, 60);
+    //grandchildNode->SetUpdateTransformation(aRotateMtx);
 
     // Create a CEnemy instance
     theEnemy = new CEnemy();
@@ -241,12 +252,24 @@ void SceneText::Init()
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f,1.0f,0.0f));
 	}
 	textObj[0]->SetText("HELLO WORLD");
+
+	//Spawning of asteroid
+	for (int i = 0; i < 50; i++)
+	{
+		Asteroid* asteroids = new Asteroid();
+		asteroids->Init();
+	}
+
+	Base* base = new Base();
+	base->Init();
 }
 
 void SceneText::Update(double dt)
 {
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
+
+	//std::cout << EntityManager::GetInstance()->entityList.size() << std::endl;
 
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
 	if(KeyboardController::GetInstance()->IsKeyDown('1'))

@@ -2,6 +2,7 @@
 #include "EntityBase.h"
 #include "Collider/Collider.h"
 #include "../Source/WeaponInfo/Laser.h"
+#include "Asteroid\Asteroid.h"
 
 #include <iostream>
 using namespace std;
@@ -27,6 +28,15 @@ void EntityManager::Update(double _dt)
     // Check for Collision amongst entities with collider properties
     CheckForCollision();
 
+	//Spawns smaller asteroid
+	while (spawnPos.size() > 0)
+	{
+		Vector3 currPos = spawnPos.back();
+		spawnPos.pop_back();
+		SpawnAss(currPos);
+	}
+
+	//SpawnAss();
     // Clean up entities that are done
     it = entityList.begin();
     while (it != end)
@@ -128,7 +138,7 @@ bool EntityManager::MarkForDeletion(EntityBase* _existingEntity)
         (*findIter)->SetIsDone(true);
         return true;
     }
-    // Return false if not found
+    // Return false if not founds
     return false;
 }
 
@@ -343,7 +353,7 @@ bool EntityManager::CheckForCollision(void)
 
             // Check for collision with another collider class
             colliderThatEnd = entityList.end();
-            int counter = 0;
+            int counter = 0;	
             for (colliderThat = colliderThis; colliderThat != colliderThatEnd; ++colliderThat)
             {
                 if (colliderThat == colliderThis)
@@ -352,24 +362,96 @@ bool EntityManager::CheckForCollision(void)
                 if ((*colliderThat)->HasCollider())
                 {
                     EntityBase *thatEntity = dynamic_cast<EntityBase*>(*colliderThat);
+
                     if (CheckSphereCollision(thisEntity, thatEntity) == true)
                     {
                         if (CheckAABBCollision(thisEntity, thatEntity) == true)
                         {
-                            thisEntity->SetIsDone(true);
-                            thatEntity->SetIsDone(true);
+							//Bullet to asteroid
+							if (thisEntity->GetEntityType() == EntityBase::ENTITY_TYPE::ASTEROID && thatEntity->GetEntityType() != EntityBase::ENTITY_TYPE::ASTEROID)
+							{
+								if (CheckSphereCollision(thisEntity, thatEntity) == true)
+								{
+									if (CheckAABBCollision(thisEntity, thatEntity) == true)
+									{
+										Asteroid *thisAsteroid = dynamic_cast<Asteroid*>(*colliderThis);
 
-                            // remove from Scene Graph
-                            if (CSceneGraph::GetInstance()->DeleteNode(*colliderThis) == true)
-                            {
-                                cout << "*** This Entity removed ***" << endl;
-                            }
+										//HIT BIG ASTEROID
+										if (!thisAsteroid->small)
+										{
+											//Split stores position of big asteroid to spawnPos;
+											thisAsteroid->Split();
+											thatEntity->SetIsDone(true);
+											thisEntity->SetIsDone(true);
+										}
 
-                            // remove from Scene Graph
-                            if (CSceneGraph::GetInstance()->DeleteNode(*colliderThat) == true)
-                            {
-                                cout << "*** That Entity removed ***" << endl;
-                            }
+										//HIT SMALL ASTEROID
+										if (thisAsteroid->small)
+										{
+											thatEntity->SetIsDone(true);
+											thisEntity->SetIsDone(true);
+										}
+										return true;
+									}
+								}
+							}
+							//Asteroid to Asteroid collision 
+							else if (thisEntity->GetEntityType() == EntityBase::ENTITY_TYPE::ASTEROID &&
+								thatEntity->GetEntityType() == EntityBase::ENTITY_TYPE::ASTEROID)
+							{
+								if (CheckSphereCollision(thisEntity, thatEntity) == true)
+								{
+									if (CheckAABBCollision(thisEntity, thatEntity) == true)
+									{
+										Asteroid *thisAsteroid = dynamic_cast<Asteroid*>(*colliderThis);
+										Asteroid *thatAsteroid = dynamic_cast<Asteroid*>(*colliderThat);
+
+										//Two small asteroid collide = Both destroyed
+										if (thisAsteroid->small && thatAsteroid->small)
+										{
+											thisEntity->SetIsDone(true);
+											thatEntity->SetIsDone(true);
+										}
+										//Small asteroid collide with Big asteroid = Small destroyed
+										else if (thisAsteroid->small && !thatAsteroid->small)
+										{
+											thisEntity->SetIsDone(true);
+										}
+										//Small asteroid collide with Big asteroid = Small destroyed
+										else if (!thisAsteroid->small && thatAsteroid->small)
+										{
+											thatEntity->SetIsDone(true);
+										}
+										//Two Big asteroid collide = Both Split
+										if (!thisAsteroid->small && !thatAsteroid->small)
+										{
+											thisAsteroid->Split();
+											thatAsteroid->Split();
+											thisEntity->SetIsDone(true);
+											thatEntity->SetIsDone(true);
+										}
+										//thisAsteroid->direction = -thisAsteroid->direction;
+										//thatAsteroid->direction = -thatAsteroid->direction;
+										return true;
+									}
+								}
+							}
+								
+							//Bullet to Something / Something to Bullet
+							thisEntity->SetIsDone(true);
+							thatEntity->SetIsDone(true);
+
+							// remove from Scene Graph
+							if (CSceneGraph::GetInstance()->DeleteNode(*colliderThis) == true)
+							{
+								cout << "*** This Entity removed ***" << endl;
+							}
+
+							// remove from Scene Graph
+							if (CSceneGraph::GetInstance()->DeleteNode(*colliderThat) == true)
+							{
+								cout << "*** That Entity removed ***" << endl;
+							}
                         }
                     }
                 }
@@ -377,4 +459,28 @@ bool EntityManager::CheckForCollision(void)
         }
     }
 	return false;
+}
+
+//Spawn new asteroid based on pos
+void EntityManager::SpawnAss(Vector3 pos)
+{
+	Asteroid * new_asteroid = new Asteroid();
+
+	new_asteroid->small = true;
+
+	new_asteroid->SetPosition(pos);
+	new_asteroid->direction.SetZero();
+	if (new_asteroid->direction == Vector3(0, 0, 0))
+	{
+		new_asteroid->direction.Set(Math::RandIntMinMax(-1, 1), Math::RandIntMinMax(-1, 1), Math::RandIntMinMax(-1, 1));
+	}
+	new_asteroid->speed = (double)Math::RandFloatMinMax(-7, 7);
+
+	new_asteroid->ShowAABB = true;
+	new_asteroid->SetCollider(true);
+	new_asteroid->InitLOD("Asteroid1", "Asteroid1", "Asteroid1");
+	new_asteroid->SetScale(Vector3(2, 2, 2));
+	new_asteroid->SetAABB(Vector3(9, 9, 9), Vector3(-9, -7.5f, -9));
+	new_asteroid->SetEntityType(EntityBase::ASTEROID);
+	EntityManager::GetInstance()->AddEntity(new_asteroid, true);
 }

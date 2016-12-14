@@ -23,7 +23,12 @@ public:
 
     void SetSpatialPartition(CSpatialPartition* theSpatialPartition);
 
+	std::list<EntityBase*> entityList;
+
+	std::vector<Vector3> spawnPos;
+
 private:
+
 	EntityManager();
 	virtual ~EntityManager();
 
@@ -43,8 +48,8 @@ private:
     bool InBox(Vector3 Hit, Vector3 B1, Vector3 B2, const int Axis);
 	// Check if any Collider is colliding with another Collider
 	bool CheckForCollision(void);
-
-	std::list<EntityBase*> entityList;
+	bool CheckForAsteroidCollision(EntityBase* colliderThis , EntityBase* colliderThat);
+	void SpawnAss(Vector3 pos);
 
     // Handler to Spatial Partition
     CSpatialPartition* theSpatialPartition;

@@ -20,8 +20,13 @@ public:
 	// Set the maxAABB and minAABB
 	void SetAABB(Vector3 maxAABB, Vector3 minAABB);
 
+	bool ShowAABB;
+
 private:
 	Mesh* modelMesh;
+
+protected:
+	Mesh* HITBOX;
 };
 
 namespace Create

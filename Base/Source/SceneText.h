@@ -11,6 +11,8 @@
 #include "GenericEntity.h"
 #include "SceneGraph/SceneNode.h"
 #include "Enemy/Enemy.h"
+#include "Asteroid\Asteroid.h"
+#include "Base\Base.h"
 
 class ShaderProgram;
 class SceneManager;

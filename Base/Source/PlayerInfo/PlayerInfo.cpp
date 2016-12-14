@@ -7,6 +7,7 @@
 #include "../Projectile/Projectile.h"
 #include "../WeaponInfo/Pistol.h"
 #include "../WeaponInfo/LaserBlaster.h"
+#include "../WeaponInfo/MachineGun.h"
 #include "../WeaponInfo/GrenadeThrow.h"
 
 // Allocating and initializing CPlayerInfo's static data member.  
@@ -65,10 +66,15 @@ void CPlayerInfo::Init(void)
 	// Set Boundary
 	maxBoundary.Set(1,1,1);
 	minBoundary.Set(-1, -1, -1);
+	
+	offset.SetZero();
 
 	// Set the pistol as the primary weapon
-	primaryWeapon = new CPistol();
+	//primaryWeapon = new CPistol();
+	//primaryWeapon->Init();
+	primaryWeapon = new MachineGun();
 	primaryWeapon->Init();
+
     // Set the laser blaster as the secondary weapon
     secondaryWeapon = new CLaserBlaster();
     secondaryWeapon->Init();
@@ -333,7 +339,8 @@ void CPlayerInfo::Update(double dt)
 	//	acceleration.y *= viewVector.y;
 	//	acceleration.z *= viewVector.z;
 	//}
-
+	Vector3 viewVector = target - position;
+	//std::cout << viewVector << std::endl;
 	// Update the position if the WASD buttons were activated
 	if (KeyboardController::GetInstance()->IsKeyDown('W') ||
 		KeyboardController::GetInstance()->IsKeyDown('A') ||
@@ -342,7 +349,8 @@ void CPlayerInfo::Update(double dt)
 		KeyboardController::GetInstance()->IsKeyDown(VK_LCONTROL) ||
 		KeyboardController::GetInstance()->IsKeyDown(VK_SPACE))
 	{
-		Vector3 viewVector = target - position;
+
+		target = position + viewVector;
 		Vector3 rightUV;
 		if (KeyboardController::GetInstance()->IsKeyDown('W'))
 		{
@@ -412,6 +420,9 @@ void CPlayerInfo::Update(double dt)
 	{
 		boostMultiplier = 1.0;
 	}
+
+	//if (viewVector.z < 0)
+	//offset.Set
 
 	/////////////////////////////FAILED BOOSTSTER/////////////////////////////
 	//if (oldposition != position)
@@ -572,15 +583,15 @@ void CPlayerInfo::Update(double dt)
 		secondaryWeapon->Update(dt);
 
 	// if Mouse Buttons were activated, then act on them
-	if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
+	if (MouseController::GetInstance()->IsButtonDown(MouseController::LMB))
 	{
 		if (primaryWeapon)
-			primaryWeapon->Discharge(position, target, this);
+			primaryWeapon->Discharge(position + offset, target, this);
 	}
 	else if (MouseController::GetInstance()->IsButtonPressed(MouseController::RMB))
 	{
         if (secondaryWeapon)
-            secondaryWeapon->Discharge(position, target, this);
+			secondaryWeapon->Discharge(position + offset, target, this);
 	}
 
 	// If the user presses R key, then reset the view to default values
