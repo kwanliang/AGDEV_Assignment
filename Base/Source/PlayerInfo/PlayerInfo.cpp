@@ -25,27 +25,16 @@ CPlayerInfo::CPlayerInfo(void)
 	//, m_dFallAcceleration(-10.0)
 	, attachedCamera(NULL)
 	, m_pTerrain(NULL)
-	, primaryWeapon(NULL)
-	, secondaryWeapon(NULL)
+	, LeftMachineGun(NULL)
+	, RightMachineGun(NULL)
 	, m_boost(FALSE)
 	, boostMultiplier(2.0)
 	, MAX_HP(100)
-	//, timer(1.0)
 {
 }
 
 CPlayerInfo::~CPlayerInfo(void)
 {
-	if (secondaryWeapon)
-	{
-		delete secondaryWeapon;
-		secondaryWeapon = NULL;
-	}
-	if (primaryWeapon)
-	{
-		delete primaryWeapon;
-		primaryWeapon = NULL;
-	}
 	m_pTerrain = NULL;
 }
 
@@ -55,38 +44,26 @@ void CPlayerInfo::Init(void)
 	HP = MAX_HP;
 
 	// Set the default values
-	defaultPosition.Set(0,0,10);
-	defaultTarget.Set(0,0,0);
-	defaultUp.Set(0,1,0);
+	defaultPosition.Set(0, 0, 10);
+	defaultTarget.Set(0, 0, 0);
+	defaultUp.Set(0, 1, 0);
 
 	// Set the current values
 	position.Set(0, 0, 10);
-	target.Set(0, 0, 0);
+	target.Set(0, 0, -1);
 	up.Set(0, 1, 0);
 	//direction.Set(0,0,1);
 	//oldposition = position;
 
 	// Set Boundary
-	maxBoundary.Set(1,1,1);
+	maxBoundary.Set(1, 1, 1);
 	minBoundary.Set(-1, -1, -1);
-	
-	leftoffset.Set(-3, -1, -15);
-	rightoffset.Set(3, -1, -15);
+
+	leftoffset.Set(-3, 0, -15);
+	rightoffset.Set(3, 0, -15);
 
 	leftPos = position + leftoffset;
 	rightPos = position + rightoffset;
-
-	// Set the pistol as the primary weapon
-	//primaryWeapon = new CPistol();
-	//primaryWeapon->Init();
-	//primaryWeapon = new MachineGun();
-	//primaryWeapon->Init();
-
-    // Set the laser blaster as the secondary weapon
-    secondaryWeapon = new CLaserBlaster();
-    secondaryWeapon->Init();
-    //secondaryWeapon = new CGrenadeThrow();
-    //secondaryWeapon->Init();
 
 	//Left Machine gun
 	LeftMachineGun = new MachineGun();
@@ -95,12 +72,7 @@ void CPlayerInfo::Init(void)
 	//Right Machine gun
 	RightMachineGun = new MachineGun();
 	RightMachineGun->Init();
-
-	//m_boostSpeed.SetZero();
-	//vel.SetZero();
-	//acceleration.SetZero();
-}	
-
+}
 //// Returns true if the player is on ground
 //bool CPlayerInfo::isOnGround(void)
 //{
@@ -305,10 +277,8 @@ void CPlayerInfo::Update(double dt)
 	double mouse_diff_x, mouse_diff_y;
 	MouseController::GetInstance()->GetMouseDelta(mouse_diff_x, mouse_diff_y);
 
-	double camera_yaw = mouse_diff_x * 0.0174555555555556 * 6;		// 3.142 / 180.0
-	double camera_pitch = mouse_diff_y * 0.0174555555555556 * 6;	// 3.142 / 180.0
-
-	//std::cout << mouse_diff_x << "....." << mouse_diff_y << std::endl;
+	double camera_yaw = mouse_diff_x * 0.0174555555555556 * 8;		// 3.142 / 180.0
+	double camera_pitch = mouse_diff_y * 0.0174555555555556 * 8;	// 3.142 / 180.0
 
 	//Update the camera direction based on mouse move
 	{
@@ -340,28 +310,13 @@ void CPlayerInfo::Update(double dt)
 			if (viewUV.y <= 0.9f && viewUV.y >= -0.6f)
 			{
 				target = position + viewUV;
+				leftoffset = rotation * leftoffset;
+				rightoffset = rotation * rightoffset;
 			}
-			leftoffset = rotation * leftoffset;
-			rightoffset = rotation * rightoffset;
 		}
 	}
 
-	////Make u turn possible
-	//if (mouse_diff_x <= -400 || mouse_diff_x >= 400)
-	//{
-	//	std::cout << "UTURN" << std::endl;
-	//	//acceleration.SetZero();
-	//	//vel.SetZero();
-	//	vel.x *= viewVector.x;
-	//	vel.y *= viewVector.y;
-	//	vel.z *= viewVector.z;
-	//	acceleration.x *= viewVector.x;
-	//	acceleration.y *= viewVector.y;
-	//	acceleration.z *= viewVector.z;
-	//}
-
 	Vector3 viewVector = target - position;
-	//std::cout << viewVector << std::endl;
 	// Update the position if the WASD buttons were activated
 	if (KeyboardController::GetInstance()->IsKeyDown('W') ||
 		KeyboardController::GetInstance()->IsKeyDown('A') ||
@@ -445,83 +400,6 @@ void CPlayerInfo::Update(double dt)
 	leftPos = position + leftoffset;
 	rightPos = position + rightoffset;
 
-	//if (viewVector.z < 0)
-	//offset.Set
-
-	/////////////////////////////FAILED BOOSTSTER/////////////////////////////
-	//if (oldposition != position)
-	//{
-	//	//std::cout << "Change from ";
-	//	direction = (position - oldposition).Normalized();
-	//	//std::cout << oldposition << " to " << position << std::endl;
-	//	oldposition = position;
-	//	
-	//}
-	//std::cout << direction.Normalized() << std::endl;
-
-	//if (m_boost)
-	//{
-	//	position += m_boostSpeed * m_dSpeed * dt;
-	//	target += m_boostSpeed * m_dSpeed * dt;
-
-	//	std::cout << m_boostSpeed << std::endl;
-
-	//	if (m_boostSpeed >= Vector3(0.1, 0.1, 0.1))
-	//	{
-	//		m_boostSpeed -= (m_boostSpeed * 0.2)* dt;
-	//	}
-	//	else if (m_boostSpeed <= Vector3(-0.1, -0.1, -0.1))
-	//	{
-	//		m_boostSpeed += (-m_boostSpeed * 0.2) * dt;
-	//	}
-	//	else
-	//	{
-	//		m_boost = false;
-	//		m_boostSpeed.SetZero();
-	//		std::cout << "DONZO" << std::endl;
-	//	}
-	//}
-
-	/////////////////////////////FAILED PHYSICS MOVEMENT/////////////////////////////
-	//else
-	//{
-	//	//Acceleration slowly deteriorates back to 0
-	//	//Method 1 (so baaaaaad)
-	//	//if (acceleration.x < Math::EPSILON)
-	//	//	acceleration.x -= resistance_factor ;
-	//	//else if (acceleration.x > Math::EPSILON)
-	//	//	acceleration.x += resistance_factor ;
-	//	//if (acceleration.y < Math::EPSILON)
-	//	//	acceleration.y -= resistance_factor ;
-	//	//else if (acceleration.y > Math::EPSILON)
-	//	//	acceleration.y += resistance_factor ;
-	//	//if (acceleration.z < Math::EPSILON)
-	//	//	acceleration.z -= resistance_factor ;
-	//	//else if (acceleration.z > Math::EPSILON)
-	//	//	acceleration.z += resistance_factor ;
-	//}
-
-	////Limits acceleration
-	//if (acceleration.x < -1)
-	//	acceleration.x = -1;
-	//else if (acceleration.x > 1)
-	//	acceleration.x = 1;
-	//if (acceleration.y < -1)
-	//	acceleration.y = -1;
-	//else if (acceleration.y > 1)
-	//	acceleration.y = 1;
-	//if (acceleration.z < -1)
-	//	acceleration.z = -1;
-	//else if (acceleration.z > 1)
-	//	acceleration.z = 1;
-
-	////Mimics physic movement (Floaty)
-	//vel += acceleration * m_dSpeed * dt;
-	//position += vel * dt;
-	//target += vel *dt;
-
-	//std::cout << acceleration << std::endl;
-
 	//// Rotate the view direction
 	//if (KeyboardController::GetInstance()->IsKeyDown(VK_LEFT) ||
 	//	KeyboardController::GetInstance()->IsKeyDown(VK_RIGHT) ||
@@ -601,10 +479,6 @@ void CPlayerInfo::Update(double dt)
     //        //secondaryWeapon->PrintSelf();
     //    }
 	//}
-	//if (primaryWeapon)
-	//	primaryWeapon->Update(dt);
-	//if (secondaryWeapon)
-	//	secondaryWeapon->Update(dt);
 
 	if (LeftMachineGun)
 		LeftMachineGun->Update(dt);
@@ -628,13 +502,16 @@ void CPlayerInfo::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyDown('P'))
 	{
 		Reset();
+		leftoffset.Set(-3, 0, -15);
+		rightoffset.Set(3, 0, -15);
+		leftPos = position + leftoffset;
+		rightPos = position + rightoffset;
 	}
 	else
 	{
 		//UpdateJumpUpwards(dt);
 		//UpdateFreeFall(dt);
 	}
-
 	// If a camera is attached to this playerInfo class, then update it
 	if (attachedCamera)
 	{

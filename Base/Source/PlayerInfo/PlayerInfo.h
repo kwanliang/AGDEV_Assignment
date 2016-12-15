@@ -102,25 +102,17 @@ public:
 
 	//CWeaponInfo* GetPrimaryWeapon(void) ;
 	//CWeaponInfo* GetSecondaryWeapon(void);	
-	CWeaponInfo* primaryWeapon;
-	CWeaponInfo* secondaryWeapon;
 
 	CWeaponInfo* LeftMachineGun;
 	CWeaponInfo* RightMachineGun;
 
+
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 position, target, up;
-	//Vector3 oldposition;
-	//Vector3 direction;
 	Vector3 maxBoundary, minBoundary;
 	GroundEntity* m_pTerrain;
 	
-	//Physics
-	//Vector3 vel;
-	//Vector3 acceleration;
-	//double resistance_factor;
-
 	const int MAX_HP;
 	int HP;
 
@@ -128,9 +120,7 @@ private:
 	double m_dAcceleration;
 
 	bool m_boost;
-	//Vector3 m_boostSpeed;
 	double boostMultiplier;
-	//double timer;
 
 	//bool m_bJumpUpwards;
 	//double m_dJumpSpeed;
