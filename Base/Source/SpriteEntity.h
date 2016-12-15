@@ -28,6 +28,12 @@ public:
 	inline void SetPosition(const Vector3& _value){ position = _value; };
 	inline Vector3 GetPosition(){ return position; };
 
+	inline void SetAngle(const float& _value){ angle = _value; };
+	inline float GetAngle(){ return angle; };
+
+	inline void SetRotation(const Vector3& _value){ rotation = _value; };
+	inline Vector3 GetRotation(){ return rotation; };
+
 	inline void SetScale(const Vector3& _value){ scale = _value; };
 	inline Vector3 GetScale(){ return scale; };
 
@@ -40,11 +46,13 @@ private:
 protected:
 	Vector3 position;
 	Vector3 scale;
+	float angle;
+	Vector3 rotation;
 };
 
 namespace Create
 {
-	SpriteEntity* Sprite2DObject(const std::string& _meshName, const Vector3& _position, const Vector3& _scale = Vector3(1.0f,1.0f,1.0f));
+	SpriteEntity* Sprite2DObject(const std::string& _meshName, const Vector3& _position, const Vector3& _scale = Vector3(1.0f, 1.0f, 1.0f));
 	SpriteEntity* Sprite3DObject(const std::string& _meshName, const Vector3& _position, const Vector3& _scale = Vector3(1.0f, 1.0f, 1.0f));
 };
 

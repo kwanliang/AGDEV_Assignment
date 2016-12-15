@@ -70,19 +70,31 @@ void CPlayerInfo::Init(void)
 	maxBoundary.Set(1,1,1);
 	minBoundary.Set(-1, -1, -1);
 	
-	offset.Set(2, -1, 0);
+	leftoffset.Set(-3, -1, -15);
+	rightoffset.Set(3, -1, -15);
+
+	leftPos = position + leftoffset;
+	rightPos = position + rightoffset;
 
 	// Set the pistol as the primary weapon
 	//primaryWeapon = new CPistol();
 	//primaryWeapon->Init();
-	primaryWeapon = new MachineGun();
-	primaryWeapon->Init();
+	//primaryWeapon = new MachineGun();
+	//primaryWeapon->Init();
 
     // Set the laser blaster as the secondary weapon
     secondaryWeapon = new CLaserBlaster();
     secondaryWeapon->Init();
     //secondaryWeapon = new CGrenadeThrow();
     //secondaryWeapon->Init();
+
+	//Left Machine gun
+	LeftMachineGun = new MachineGun();
+	LeftMachineGun->Init();
+
+	//Right Machine gun
+	RightMachineGun = new MachineGun();
+	RightMachineGun->Init();
 
 	//m_boostSpeed.SetZero();
 	//vel.SetZero();
@@ -313,7 +325,8 @@ void CPlayerInfo::Update(double dt)
 			rightUV.Normalize();
 			up = rightUV.Cross(viewUV).Normalized();
 
-			offset = rotation * offset;
+			leftoffset = rotation * leftoffset;
+			rightoffset = rotation * rightoffset;
 		}
 		{
 			float pitch = (float)(-m_dSpeed * camera_pitch * (float)dt);
@@ -328,6 +341,8 @@ void CPlayerInfo::Update(double dt)
 			{
 				target = position + viewUV;
 			}
+			leftoffset = rotation * leftoffset;
+			rightoffset = rotation * rightoffset;
 		}
 	}
 
@@ -344,6 +359,7 @@ void CPlayerInfo::Update(double dt)
 	//	acceleration.y *= viewVector.y;
 	//	acceleration.z *= viewVector.z;
 	//}
+
 	Vector3 viewVector = target - position;
 	//std::cout << viewVector << std::endl;
 	// Update the position if the WASD buttons were activated
@@ -425,6 +441,9 @@ void CPlayerInfo::Update(double dt)
 	{
 		boostMultiplier = 1.0;
 	}
+
+	leftPos = position + leftoffset;
+	rightPos = position + rightoffset;
 
 	//if (viewVector.z < 0)
 	//offset.Set
@@ -569,35 +588,40 @@ void CPlayerInfo::Update(double dt)
 	//}
 
 	// Update the weapons
-	if (KeyboardController::GetInstance()->IsKeyReleased('R'))
-	{
-		if (primaryWeapon)
-		{
-			primaryWeapon->Reload(true);
-			//primaryWeapon->PrintSelf();
-		}
-        if (secondaryWeapon)
-        {
-            secondaryWeapon->Reload();
-            //secondaryWeapon->PrintSelf();
-        }
-	}
-	if (primaryWeapon)
-		primaryWeapon->Update(dt);
-	if (secondaryWeapon)
-		secondaryWeapon->Update(dt);
+	//if (KeyboardController::GetInstance()->IsKeyReleased('R'))
+	//{
+	//	if (primaryWeapon)
+	//	{
+	//		primaryWeapon->Reload(true);
+	//		//primaryWeapon->PrintSelf();
+	//	}
+    //    if (secondaryWeapon)
+    //    {
+    //        secondaryWeapon->Reload();
+    //        //secondaryWeapon->PrintSelf();
+    //    }
+	//}
+	//if (primaryWeapon)
+	//	primaryWeapon->Update(dt);
+	//if (secondaryWeapon)
+	//	secondaryWeapon->Update(dt);
+
+	if (LeftMachineGun)
+		LeftMachineGun->Update(dt);
+	if (RightMachineGun)
+		RightMachineGun->Update(dt);
 
 	// if Mouse Buttons were activated, then act on them
 	if (MouseController::GetInstance()->IsButtonDown(MouseController::LMB))
 	{
-		if (primaryWeapon)
-			primaryWeapon->Discharge(position + offset, target + offset, this);
+		if (LeftMachineGun)
+			LeftMachineGun->Discharge(leftPos, target + leftoffset, this);
 	}
-	else if (MouseController::GetInstance()->IsButtonPressed(MouseController::RMB))
+	if (MouseController::GetInstance()->IsButtonDown(MouseController::RMB))
 	{
 		//DamageHP(10);
-        if (secondaryWeapon)
-			secondaryWeapon->Discharge(position + offset, target + offset, this);
+		if (RightMachineGun)
+			RightMachineGun->Discharge(rightPos, target + rightoffset, this);
 	}
 
 	// If the user presses R key, then reset the view to default values

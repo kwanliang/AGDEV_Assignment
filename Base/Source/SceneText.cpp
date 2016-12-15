@@ -21,6 +21,9 @@
 #include "Light.h"
 #include "SkyBox/SkyBoxEntity.h"
 
+#include "RenderHelper.h"
+#include "../Source/Sound/SoundManager.h"
+
 #include <iostream>
 using namespace std;
 
@@ -176,6 +179,13 @@ void SceneText::Init()
 
 	MeshBuilder::GetInstance()->GenerateQuad("crosshair", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("crosshair")->textureID = LoadTGA("Image//crosshair.tga");
+	//MeshBuilder::GetInstance()->GenerateOBJ("Machinegun", "OBJ//MachineGun.obj");
+	//MeshBuilder::GetInstance()->GetMesh("Machinegun")->textureID = LoadTGA("Image//MachineGun.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("MachinegunL", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("MachinegunL")->textureID = LoadTGA("Image//MachineGunL.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("MachinegunR", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("MachinegunR")->textureID = LoadTGA("Image//MachineGunR.tga");
+
 	MeshBuilder::GetInstance()->GenerateQuad("HP", Color(0, 1, 0), 1.f);
 	MeshBuilder::GetInstance()->GenerateQuad("HUD", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("HUD")->textureID = LoadTGA("Image//HUD.tga");
@@ -186,6 +196,7 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateCircle("Enemy", Color(1.0f, 0.0f, 0.0f), 1.0f);
 
 	//MeshBuilder::G
+	SoundManager::GetInstance()->playMusic("Sound/BGM.mp3");
 
     // Set up the Spatial Partition and pass it to the EntityManager to manage
     CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);
@@ -255,6 +266,16 @@ void SceneText::Init()
 	////playerInfo->SetTerrain(groundEntity);
     //theEnemy->SetTerrain(groundEntity);
 
+	//Spawning of asteroid
+	for (int i = 0; i < 50; i++)
+	{
+		Asteroid* asteroids = new Asteroid();
+		asteroids->Init();
+	}
+
+	base = new Base();
+	base->Init();
+
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
@@ -268,15 +289,8 @@ void SceneText::Init()
 	textObj[4]->SetText("HP");
 	textObj[4]->SetPosition(Vector3(-15, halfWindowHeight - 15, 0.0f));
 
-	//Spawning of asteroid
-	for (int i = 0; i < 50; i++)
-	{
-		Asteroid* asteroids = new Asteroid();
-		asteroids->Init();
-	}
-
-	Base* base = new Base();
-	base->Init();
+	LMG = Create::Sprite2DObject("MachinegunL", Vector3(0, 0, 0), Vector3(halfWindowWidth + 150, halfWindowHeight + 150, 1));
+	RMG = Create::Sprite2DObject("MachinegunR", Vector3(0, 0, 0), Vector3(halfWindowWidth + 150, halfWindowHeight + 150, 1));
 
 	HP_Scale = (float) (playerInfo->GetHP() * 4);
 	HP_Bar = Create::Sprite2DObject("HP", Vector3(0, halfWindowHeight - 35, 0), Vector3(HP_Scale, 20, 1));
@@ -392,16 +406,48 @@ void SceneText::Update(double dt)
 	HP_Bar->SetScale(Vector3(HP_Scale, 20, 1));
 
 	std::ostringstream UI;
-	UI << "MG:" <<  playerInfo->primaryWeapon->GetMagRound() << "/" << playerInfo->primaryWeapon->GetMaxMagRound();
+	if (playerInfo->LeftMachineGun->reloading)
+		UI << "RELOADING";
+	else
+		UI << "MG:" << playerInfo->LeftMachineGun->GetMagRound() << "/" << playerInfo->LeftMachineGun->GetMaxMagRound();
 	textObj[5]->SetText(UI.str());
-	textObj[5]->SetPosition(Vector3(0 + 150, -halfWindowHeight + 50, 0.0f));
-	textObj[5]->SetAngle(15.0f);
-
+	textObj[5]->SetPosition(Vector3(0 - 265, -halfWindowHeight + 85, 0.0f));
+	textObj[5]->SetAngle(-20.0f);
+	
 	UI.str("");
-	UI << "MSL:" << playerInfo->secondaryWeapon->GetMagRound() << "/" << playerInfo->secondaryWeapon->GetMaxMagRound();
+	if (playerInfo->RightMachineGun->reloading)
+		UI << "RELOADING";
+	else
+		UI << "MG:" << playerInfo->RightMachineGun->GetMagRound() << "/" << playerInfo->RightMachineGun->GetMaxMagRound();
 	textObj[6]->SetText(UI.str());
-	textObj[6]->SetPosition(Vector3(0 + 150, -halfWindowHeight + 30, 0.0f));
-	textObj[6]->SetAngle(15.0f);
+	textObj[6]->SetPosition(Vector3(0 + 150, -halfWindowHeight + 45, 0.0f));
+	textObj[6]->SetAngle(20.0f);
+
+	if (!playerInfo->LeftMachineGun->reloading)
+	{
+		LMG->SetPosition(Vector3(-330, -120, -1.0f));
+		LMG->SetAngle(-5.0f);
+	}
+	else
+	{
+		LMG->SetPosition(Vector3(-330, -180, -1.0f));
+	}
+
+	if (!playerInfo->RightMachineGun->reloading)
+	{
+		RMG->SetPosition(Vector3(360, -120, -1.0f));
+		RMG->SetAngle(5.0f);
+	}
+	else
+	{
+		RMG->SetPosition(Vector3(360, -180, -1.0f));
+	}
+
+	//UI.str("");
+	//UI << "MSL:" << playerInfo->secondaryWeapon->GetMagRound() << "/" << playerInfo->secondaryWeapon->GetMaxMagRound();
+	//textObj[6]->SetText(UI.str());
+	//textObj[6]->SetPosition(Vector3(0 + 150, -halfWindowHeight + 30, 0.0f));
+	//textObj[6]->SetAngle(15.0f);
 }
 
 
@@ -421,6 +467,14 @@ void SceneText::Render()
 	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
 	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 	GraphicsManager::GetInstance()->DetachCamera();
+
+	//MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	//modelStack.PushMatrix();
+	//modelStack.Translate(playerInfo->GetPos().x + 2, playerInfo->GetPos().y, playerInfo->GetPos().z);
+	//modelStack.Scale(0.5f, 0.5f, 0.5f);
+	//RenderHelper::RenderMesh("")
+	//modelStack.PopMatrix();
+
 	EntityManager::GetInstance()->RenderUI();
 }
 

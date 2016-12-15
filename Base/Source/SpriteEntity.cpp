@@ -7,6 +7,8 @@
 SpriteEntity::SpriteEntity(Mesh* _modelMesh) :
 modelMesh(_modelMesh),
 position(0.0f, 0.0f, 0.0f),
+angle(0.0f),
+rotation(0.0f, 0.0f, 1.0f),
 scale(1.0f, 1.0f, 1.0f),
 mode(MODE_2D)
 {
@@ -42,6 +44,7 @@ void SpriteEntity::RenderUI()
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
 	modelStack.Translate(position.x, position.y, position.z);
+	modelStack.Rotate(angle, 0, 0, 1);
 	modelStack.Scale(scale.x, scale.y, scale.z);
 	RenderHelper::RenderMesh(modelMesh);
 	modelStack.PopMatrix();

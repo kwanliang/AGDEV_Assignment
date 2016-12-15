@@ -3,6 +3,7 @@
 #include "Collider/Collider.h"
 #include "../Source/WeaponInfo/Laser.h"
 #include "Asteroid\Asteroid.h"
+#include "../Source/Sound/SoundManager.h"
 
 #include <iostream>
 using namespace std;
@@ -391,6 +392,7 @@ bool EntityManager::CheckForCollision(void)
 											thatEntity->SetIsDone(true);
 											thisEntity->SetIsDone(true);
 										}
+
 										return true;
 									}
 								}

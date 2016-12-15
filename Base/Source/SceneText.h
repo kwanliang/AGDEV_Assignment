@@ -43,6 +43,11 @@ private:
 	GenericEntity* theCube;
     CEnemy* theEnemy;
 
+	Base* base;
+
+	SpriteEntity* LMG;
+	SpriteEntity* RMG;
+
 	SpriteEntity* HP_Bar;
 	float HP_Scale;
 

@@ -9,6 +9,9 @@ class CWeaponInfo
 public:
 	CWeaponInfo();
 	virtual ~CWeaponInfo();
+
+	bool reloading;
+
 protected:
 	// The number of ammunition in a magazine for this weapon
 	int magRounds;
@@ -25,6 +28,9 @@ protected:
 	double elapsedTime;
 	// Boolean flag to indicate if weapon can fire now
 	bool bFire;
+
+private:
+	double timer;
 public:
 	// Set the number of ammunition in the magazine for this player
 	virtual void SetMagRound(const int magRounds);

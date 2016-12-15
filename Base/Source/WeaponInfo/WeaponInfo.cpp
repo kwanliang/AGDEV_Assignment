@@ -1,5 +1,6 @@
 #include "WeaponInfo.h"
 #include "../Projectile/Projectile.h"
+#include "../Sound/SoundManager.h"
 
 #include <iostream>
 using namespace std;
@@ -12,6 +13,8 @@ CWeaponInfo::CWeaponInfo()
 	, timeBetweenShots(0.5)
 	, elapsedTime(0.0)
 	, bFire(true)
+	, timer(2.0)
+	, reloading(false)
 {
 }
 
@@ -128,12 +131,29 @@ void CWeaponInfo::Init(void)
 // Update the elapsed time
 void CWeaponInfo::Update(const double dt)
 {
-	elapsedTime += dt;
-	if (elapsedTime > timeBetweenShots)
+	if (!reloading)
 	{
-		bFire = true;
-		elapsedTime = 0.0;
+		elapsedTime += dt;
+		if (elapsedTime > timeBetweenShots)
+		{
+			bFire = true;
+			elapsedTime = 0.0;
+		}
 	}
+	else
+	{
+		if (timer <= 2.0)
+		{
+			timer += dt;
+			bFire = false;
+		}
+		else
+		{
+			bFire = true;
+			reloading = false;
+		}
+	}
+
 }
 
 // Discharge this weapon
@@ -144,6 +164,8 @@ void CWeaponInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _sour
 		// If there is still ammo in the magazine, then fire
 		if (magRounds > 0)
 		{
+			SoundManager::GetInstance()->playSoundEffect2D("Sound/L_MG.wav");
+
 			// Create a projectile with a cube mesh. Its position and direction is same as the player.
 			// It will last for 3.0 seconds and travel at 500 units per second
 			CProjectile* aProjectile = Create::Projectile("sphere",
@@ -157,6 +179,12 @@ void CWeaponInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _sour
 			bFire = false;
 			magRounds--;
 		}
+		else
+		{
+			SoundManager::GetInstance()->playSoundEffect2D("Sound/reload.mp3");
+			timer = 0.0;
+			Reload(true);
+		}
 	}
 }
 
@@ -167,6 +195,7 @@ void CWeaponInfo::Reload(bool infinite)
 	{
 		if (infinite)
 		{
+			reloading = true;
 			magRounds = maxMagRounds;
 
 		}

@@ -105,6 +105,9 @@ public:
 	CWeaponInfo* primaryWeapon;
 	CWeaponInfo* secondaryWeapon;
 
+	CWeaponInfo* LeftMachineGun;
+	CWeaponInfo* RightMachineGun;
+
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 position, target, up;
@@ -139,6 +142,8 @@ private:
 
 	FPSCamera* attachedCamera;
 
-	Vector3 offset;
-
+	Vector3 leftoffset;
+	Vector3 rightoffset;
+	Vector3 leftPos;
+	Vector3 rightPos;
 };
