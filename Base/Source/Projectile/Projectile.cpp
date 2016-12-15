@@ -13,6 +13,7 @@ CProjectile::CProjectile(void)
 	, m_fSpeed(10.0f)
 	, theSource(NULL)
 {
+    SetEntityType(EntityBase::PROJECTILE);
 }
 
 CProjectile::CProjectile(Mesh* _modelMesh)

@@ -36,6 +36,16 @@ void EntityBase::SetIsDone(bool _value)
 	isDone = _value;
 }
 
+bool EntityBase::GetDamaged(void)
+{
+    return m_bDamaged;
+}
+
+void EntityBase::SetDamaged(bool m_bDamaged)
+{
+    this->m_bDamaged = m_bDamaged;
+}
+
 // Check if this entity has a collider class parent
 bool EntityBase::HasCollider(void) const
 {

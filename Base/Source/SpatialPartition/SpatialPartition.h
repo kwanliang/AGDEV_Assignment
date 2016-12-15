@@ -8,20 +8,24 @@
 class CSpatialPartition
 {
 protected:
-	static CSpatialPartition *sp_instance;
-	// Constructor
-	CSpatialPartition(void);
+    static CSpatialPartition *sp_instance;
+    // Constructor
+    CSpatialPartition(void);
 
-	// Variables
-	CGrid* theGrid;
-	int xSize;
-	int zSize;
-	int xGridSize;
-	int zGridSize;
-	int xNumOfGrid;
-	int zNumOfGrid;
-	float yOffset;
-	std::string _meshName; // Name of the mesh
+    // Variables
+    CGrid* theGrid;
+    int xSize;
+    int ySize;
+    int zSize;
+    int xGridSize;
+    int yGridSize;
+    int zGridSize;
+    int xNumOfGrid;
+    int yNumOfGrid;
+    int zNumOfGrid;
+    Vector3 Offset;
+    std::string _meshName; // Name of the mesh
+    std::string _meshName2; // Name of the mesh 2
 
     // We store the pointer to the Camera so we can get it's position and direction to calculate LOD and visibility
     FPSCamera* theCamera;
@@ -29,72 +33,80 @@ protected:
     float LevelOfDetails_Distances[2];
 
 public:
-	static CSpatialPartition *GetInstance()
-	{
-		if (!sp_instance)
-			sp_instance = new CSpatialPartition;
-		return sp_instance;
-	}
-	static bool DropInstance()
-	{
-		if (sp_instance)
-		{
-			delete sp_instance;
-			sp_instance = NULL;
-			return true;
-		}
-		return false;
-	}
-	~CSpatialPartition(void);
+    static CSpatialPartition *GetInstance()
+    {
+        if (!sp_instance)
+            sp_instance = new CSpatialPartition;
+        return sp_instance;
+    }
+    static bool DropInstance()
+    {
+        if (sp_instance)
+        {
+            delete sp_instance;
+            sp_instance = NULL;
+            return true;
+        }
+        return false;
+    }
+    ~CSpatialPartition(void);
 
-	// Initialise the spatial partition
-	bool Init(	const int xGridSize, const int zGridSize, 
-				const int xNumOfGrid, const int zNumOfGrid, 
-				const float yOffset = -9.9f);
+    // Initialise the spatial partition
+    bool Init(const int xGridSize, const int yGridSize, const int zGridSize,
+        const int xNumOfGrid, const int yNumOfGrid, const int zNumOfGrid);
 
-	// Set a particular grid's Mesh
-	void SetMesh(const std::string& _meshName);
+    // Set a particular grid's Mesh
+    void SetMesh(const std::string& _meshName, const std::string& _meshName2);
 
-	// ApplyMesh
-	void ApplyMesh(void);
+    // ApplyMesh
+    void ApplyMesh(void);
 
-	// Update the spatial partition
-	void Update(void);
-	// Render the spatial partition
-	void Render(Vector3* theCameraPosition = NULL);
+    // Update the spatial partition
+    void Update(void);
+    // Render the spatial partition
+    void Render(Vector3* theCameraPosition = NULL);
 
-	// Get xSize of the entire spatial partition
-	int GetxSize(void) const;
-	// Get zSize of the entire spatial partition
-	int GetzSize(void) const;
-	// Get xSize
-	int GetxGridSize(void) const;
-	// Get zNumOfGrid
-	int GetzGridSize(void) const;
-	// Get xNumOfGrid
-	int GetxNumOfGrid(void) const;
-	// Get zNumOfGrid
-	int GetzNumOfGrid(void) const;
+    // Get xSize of the entire spatial partition
+    int GetxSize(void) const;
+    // Get ySize of the entire spatial partition
+    int GetySize(void) const;
+    // Get zSize of the entire spatial partition
+    int GetzSize(void) const;
+    // Get xSize
+    int GetxGridSize(void) const;
+    // Get ySize
+    int GetyGridSize(void) const;
+    // Get zNumOfGrid
+    int GetzGridSize(void) const;
+    // Get xNumOfGrid
+    int GetxNumOfGrid(void) const;
+    // Get yNumOfGrid
+    int GetyNumOfGrid(void) const;
+    // Get zNumOfGrid
+    int GetzNumOfGrid(void) const;
 
-	// Get a particular grid
-	CGrid GetGrid(const int xIndex, const int zIndex) const;
+    // Get Offset
+    Vector3 GetOffset(void) const;
 
-	// Get vector of objects from this Spatial Partition
-	vector<EntityBase*> GetObjects(Vector3 position, const float radius);
+    // Get a particular grid
+    CGrid GetGrid(const int xIndex, const int yIndex, const int zIndex) const;
 
-	// Add a new object
-	void Add(EntityBase* theObject);
-	// Remove but not delete object from this grid
-	void Remove(EntityBase* theObject);
+    // Get vector of objects from this Spatial Partition
+    vector<EntityBase*> GetObjects(Vector3 position, const float radius);
 
-	// Calculate the squared distance from camera to a grid's centrepoint
-	float CalculateDistanceSquare(Vector3* theCameraPosition, const int xIndex, const int zIndex);
+    // Add a new object
+    void Add(EntityBase* theObject);
+    // Remove but not delete object from this grid
+    void Remove(EntityBase* theObject);
 
-	//PrintSelf
-	void PrintSelf() const;
+    // Calculate the squared distance from camera to a grid's centrepoint
+    float CalculateDistanceSquare(Vector3* theCameraPosition, const int xIndex, const int yIndex, const int zIndex);
 
-	// The vector of objects due for migration to another grid
-	vector<EntityBase*> MigrationList;
+    //PrintSelf
+    void PrintSelf() const;
+
+    // The vector of objects due for migration to another grid
+    vector<EntityBase*> MigrationList;
 
     // Handling Camera
     void SetCamera(FPSCamera* _cameraPtr);
@@ -103,5 +115,5 @@ public:
     // Set LOD camera
     void SetLevelOfDetails(const float distance_High2Mid, const float distance_Mid2Low);
     // Check if a CGrid is visible to the camera
-    bool IsVisible(Vector3 theCameraPosition, Vector3 theCameraDirection, const int xIndex, const int zIndex);
+    bool IsVisible(Vector3 theCameraPosition, Vector3 theCameraDirection, const int xIndex, const int yIndex, const int zIndex);
 };

@@ -10,10 +10,9 @@
 #include "MatrixStack.h"
 #include "GenericEntity.h"
 #include "SceneGraph/SceneNode.h"
-#include "Enemy/Enemy.h"
-#include "Asteroid\Asteroid.h"
-#include "Base\Base.h"
-#include "Minimap\Minimap.h"
+#include "Spawn/Spawn.h"
+#include "Base/Base.h"
+#include "Minimap/Minimap.h"
 
 class ShaderProgram;
 class SceneManager;
@@ -41,7 +40,8 @@ private:
 	Light* lights[2];
 
 	GenericEntity* theCube;
-    CEnemy* theEnemy;
+
+    CSpawn* EntitySpawn;
 
 	Base* base;
 

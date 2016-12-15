@@ -26,7 +26,7 @@ void Asteroid::Init(void)
 
 	mini = false;
 
-	ShowAABB = true;
+	ShowAABB = false;
 	SetCollider(true);
 
 	switch (Math::RandIntMinMax(1, 2))

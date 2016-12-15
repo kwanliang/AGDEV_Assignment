@@ -9,8 +9,10 @@ public:
     enum ENTITY_TYPE
     {
         DEFAULT,
+        ASTEROID,
         ENEMY,
-		ASTEROID,
+        UPGRADE,
+        PROJECTILE,
 		BASE,
         NUM_ENTITYTYPE
     };
@@ -28,8 +30,11 @@ public:
 	inline void SetScale(const Vector3& _value){ scale = _value; };
 	inline Vector3 GetScale(){ return scale; };
 
-	bool IsDone();
+    bool IsDone(void);
 	void SetIsDone(const bool _value);
+
+    bool GetDamaged(void);
+    void SetDamaged(bool m_bDamaged);
 
 	// Check if this entity has a collider class parent
 	virtual bool HasCollider(void) const;
@@ -52,6 +57,7 @@ protected:
 	bool isDone;
 	bool m_bCollider;
     bool m_bLaser;
+    bool m_bDamaged;
 
     ENTITY_TYPE m_eEntityType;
 };

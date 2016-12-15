@@ -1,18 +1,23 @@
-﻿Build started 12/9/2016 5:32:18 PM.
-     1>Project "C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\Base\Base.vcxproj" on node 2 (Build target(s)).
+﻿Build started 16-Dec-16 6:28:46 AM.
+     1>Project "C:\Users\Lee\Desktop\AGDEV_Assignment\Base\Base.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\/Common/Source" /I"C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\/glfw/include" /I"C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\/glew/include" /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\SceneText.cpp
-         SceneText.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Lee\Desktop\AGDEV_Assignment\/Common/Source /IC:\Users\Lee\Desktop\AGDEV_Assignment\/glfw/include /IC:\Users\Lee\Desktop\AGDEV_Assignment\/glew/include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Spawn\Spawn.cpp
+         Spawn.cpp
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\Debug\Base.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\Debug" /LIBPATH:"C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\/glfw/lib-msvc100" /LIBPATH:"C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\/glew/lib" Common.lib winmm.lib opengl32.lib glu32.lib glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\Debug\Base.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\Debug\Base.lib" /MACHINE:X86 Debug\Application.obj
-         Debug\Enemy.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Lee\Desktop\AGDEV_Assignment\Debug\Base.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\Users\Lee\Desktop\AGDEV_Assignment\Debug /LIBPATH:"C:\Users\Lee\Desktop\AGDEV_Assignment\/glfw/lib-msvc100" /LIBPATH:C:\Users\Lee\Desktop\AGDEV_Assignment\/glew/lib Common.lib winmm.lib opengl32.lib glu32.lib glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Lee\Desktop\AGDEV_Assignment\Debug\Base.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Lee\Desktop\AGDEV_Assignment\Debug\Base.lib" /MACHINE:X86 Debug\Application.obj
+         Debug\Asteroid.obj
+         Debug\Base.obj
+         Debug\DShip.obj
+         Debug\Drone.obj
          Debug\EntityManager.obj
          Debug\FPSCamera.obj
          Debug\GenericEntity.obj
+         Debug\GOAP.obj
          Debug\GroundEntity.obj
          Debug\LevelOfDetails.obj
          Debug\Light.obj
          Debug\main.obj
+         Debug\Minimap.obj
          Debug\OBJMesh.obj
          Debug\PlayerInfo.obj
          Debug\Grenade.obj
@@ -25,18 +30,22 @@
          Debug\SkyBoxEntity.obj
          Debug\Grid.obj
          Debug\SpatialPartition.obj
+         Debug\Spawn.obj
          Debug\SpriteEntity.obj
          Debug\TextEntity.obj
+         Debug\Fighter.obj
+         Debug\Upgrade.obj
          Debug\GrenadeThrow.obj
          Debug\Laser.obj
          Debug\LaserBlaster.obj
+         Debug\MachineGun.obj
          Debug\Pistol.obj
          Debug\WeaponInfo.obj
      1>Application.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
      1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-         Base.vcxproj -> C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\Debug\Base.exe
-     1>Done Building Project "C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\Base\Base.vcxproj" (Build target(s)).
+         Base.vcxproj -> C:\Users\Lee\Desktop\AGDEV_Assignment\Debug\Base.exe
+     1>Done Building Project "C:\Users\Lee\Desktop\AGDEV_Assignment\Base\Base.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.72
+Time Elapsed 00:00:01.21

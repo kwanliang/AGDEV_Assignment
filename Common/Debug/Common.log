@@ -1,10 +1,10 @@
-﻿Build started 12/9/2016 5:13:59 PM.
-     1>Project "C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\Common\Common.vcxproj" on node 2 (Build target(s)).
+﻿Build started 16-Dec-16 4:37:03 AM.
+     1>Project "C:\Users\Lee\Desktop\AGDEV_Assignment\Common\Common.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\/glew/include" /I"C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\/glfw/include" /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\EntityBase.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Lee\Desktop\AGDEV_Assignment\/glew/include /IC:\Users\Lee\Desktop\AGDEV_Assignment\/glfw/include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\EntityBase.cpp
          EntityBase.cpp
        Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\Debug\Common.lib" /NOLOGO Debug\CameraBase.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\Lee\Desktop\AGDEV_Assignment\Debug\Common.lib" /NOLOGO Debug\CameraBase.obj
          Debug\Collider.obj
          Debug\EntityBase.obj
          Debug\GraphicsManager.obj
@@ -26,9 +26,9 @@
          Debug\Vector2.obj
          Debug\Vector3.obj
          Debug\Win32Input.obj
-         Common.vcxproj -> C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\Debug\Common.lib
-     1>Done Building Project "C:\Users\155117g\Downloads\NYP_Framework (1)\NYP_Framework\Common\Common.vcxproj" (Build target(s)).
+         Common.vcxproj -> C:\Users\Lee\Desktop\AGDEV_Assignment\Debug\Common.lib
+     1>Done Building Project "C:\Users\Lee\Desktop\AGDEV_Assignment\Common\Common.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.16
+Time Elapsed 00:00:00.59

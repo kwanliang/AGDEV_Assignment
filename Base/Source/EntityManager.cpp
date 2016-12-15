@@ -364,6 +364,19 @@ bool EntityManager::CheckForCollision(void)
                 {
                     EntityBase *thatEntity = dynamic_cast<EntityBase*>(*colliderThat);
 
+                    //Bullet to Enemy
+                    if (thisEntity->GetEntityType() == EntityBase::ENEMY)
+                    {
+                        if (CheckSphereCollision(thisEntity, thatEntity) == true)
+                        {
+                            if (CheckAABBCollision(thisEntity, thatEntity) == true)
+                            {
+                                thatEntity->SetIsDone(true);
+                                thisEntity->SetDamaged(true);
+                            }
+                        }                  
+                    }
+
                     if (CheckSphereCollision(thisEntity, thatEntity) == true)
                     {
                         if (CheckAABBCollision(thisEntity, thatEntity) == true)
@@ -439,21 +452,21 @@ bool EntityManager::CheckForCollision(void)
 								}
 							}
 								
-							//Bullet to Something / Something to Bullet
-							thisEntity->SetIsDone(true);
-							thatEntity->SetIsDone(true);
+							////Bullet to Something / Something to Bullet
+							//thisEntity->SetIsDone(true);
+							//thatEntity->SetIsDone(true);
 
-							// remove from Scene Graph
-							if (CSceneGraph::GetInstance()->DeleteNode(*colliderThis) == true)
-							{
-								cout << "*** This Entity removed ***" << endl;
-							}
+							//// remove from Scene Graph
+							//if (CSceneGraph::GetInstance()->DeleteNode(*colliderThis) == true)
+							//{
+							//	cout << "*** This Entity removed ***" << endl;
+							//}
 
-							// remove from Scene Graph
-							if (CSceneGraph::GetInstance()->DeleteNode(*colliderThat) == true)
-							{
-								cout << "*** That Entity removed ***" << endl;
-							}
+							//// remove from Scene Graph
+							//if (CSceneGraph::GetInstance()->DeleteNode(*colliderThat) == true)
+							//{
+							//	cout << "*** That Entity removed ***" << endl;
+							//}
                         }
                     }
                 }

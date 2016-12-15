@@ -15,7 +15,7 @@
 CPlayerInfo *CPlayerInfo::s_instance = 0;
 
 CPlayerInfo::CPlayerInfo(void)
-	: m_dSpeed(80.0)
+	: m_dSpeed(160.0)
 	, m_dAcceleration(10.0)
 	//, m_bJumpUpwards(false)
 	//, m_dJumpSpeed(10.0)
@@ -383,7 +383,7 @@ void CPlayerInfo::Update(double dt)
 			position.y += (float)m_dSpeed * boostMultiplier *  (float)dt;
 		}
 		// Constrain the position
-		//Constrain();
+		Constrain();
 		// Update the target
 		target = position + viewVector;
 	}
@@ -524,19 +524,19 @@ void CPlayerInfo::Update(double dt)
 // Constrain the position within the borders
 void CPlayerInfo::Constrain(void)
 {
-	//// Constrain player within the boundary
-	//if (position.x > maxBoundary.x - 1.0f)
-	//	position.x = maxBoundary.x - 1.0f;
-	////if (position.y > maxBoundary.y - 1.0f)
-	//	position.y = maxBoundary.y - 1.0f;
-	//if (position.z > maxBoundary.z - 1.0f)
-	//	position.z = maxBoundary.z - 1.0f;
-	//if (position.x < minBoundary.x + 1.0f)
-	//	position.x = minBoundary.x + 1.0f;
-	////if (position.y < minBoundary.y + 1.0f)
-	//	position.y = minBoundary.y + 1.0f;
-	//if (position.z < minBoundary.z + 1.0f)
-	//	position.z = minBoundary.z + 1.0f;
+	// Constrain player within the boundary
+	if (position.x > maxBoundary.x - 1.0f)
+		position.x = maxBoundary.x - 1.0f;
+	if (position.y > maxBoundary.y - 1.0f)
+		position.y = maxBoundary.y - 1.0f;
+	if (position.z > maxBoundary.z - 1.0f)
+		position.z = maxBoundary.z - 1.0f;
+	if (position.x < minBoundary.x + 1.0f)
+		position.x = minBoundary.x + 1.0f;
+	if (position.y < minBoundary.y + 1.0f)
+		position.y = minBoundary.y + 1.0f;
+	if (position.z < minBoundary.z + 1.0f)
+		position.z = minBoundary.z + 1.0f;
 
 	// if the player is not jumping nor falling, then adjust his y position
 	//if ((m_bJumpUpwards == false) && (m_bFallDownwards == false))

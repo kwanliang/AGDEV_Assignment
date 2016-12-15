@@ -166,17 +166,24 @@ void SceneText::Init()
     MeshBuilder::GetInstance()->GenerateRay("laser", 10.0f);
     MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(1.0f, 0.64f, 0.0f), 1.0f);
     MeshBuilder::GetInstance()->GenerateQuad("GRIDMESH", Color(1.0f, 1.0f, 1.0f), 10.f);
+    MeshBuilder::GetInstance()->GenerateCube("CUBEMESH", Color(1.0f, 1.0f, 1.0f), 1.f);
+    MeshBuilder::GetInstance()->GenerateCube("CUBEMESH2", Color(1.0f, 0.0f, 0.0f), 1.f);
 
 	MeshBuilder::GetInstance()->GenerateCube("hitbox", Color(1.0f, 0.0f, 0.0f), 1.0f);
 
+    // Asteroid
 	MeshBuilder::GetInstance()->GenerateOBJ("Asteroid1", "OBJ//Asteroids//Asteroid1.obj");
 	MeshBuilder::GetInstance()->GetMesh("Asteroid1")->textureID = LoadTGA("Image//Asteroids//Asteroid.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Asteroid2", "OBJ//Asteroids//Asteroid2.obj");
 	MeshBuilder::GetInstance()->GetMesh("Asteroid2")->textureID = LoadTGA("Image//Asteroids//Asteroid.tga");
 
+    // Defense
+    MeshBuilder::GetInstance()->GenerateOBJ("DDrone", "OBJ//DDrone.obj");
+    MeshBuilder::GetInstance()->GetMesh("DDrone")->textureID = LoadTGA("Image//DDrone.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Base1", "OBJ//Base//base.obj");
 	MeshBuilder::GetInstance()->GetMesh("Base1")->textureID = LoadTGA("Image//Base//base.tga");
 
+    // Player & Minimap
 	MeshBuilder::GetInstance()->GenerateQuad("crosshair", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("crosshair")->textureID = LoadTGA("Image//crosshair.tga");
 	//MeshBuilder::GetInstance()->GenerateOBJ("Machinegun", "OBJ//MachineGun.obj");
@@ -195,24 +202,36 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateCircle("Player", Color(0.0f, 1.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCircle("Enemy", Color(1.0f, 0.0f, 0.0f), 1.0f);
 
-	//MeshBuilder::G
-	SoundManager::GetInstance()->playMusic("Sound/BGM.mp3");
+    // Enemies
+    MeshBuilder::GetInstance()->GenerateOBJ("Fighter", "OBJ//fighter.obj");
+    MeshBuilder::GetInstance()->GetMesh("Fighter")->textureID = LoadTGA("Image//fighter.tga");
+    MeshBuilder::GetInstance()->GenerateOBJ("DShip", "OBJ//DShip.obj");
+    //MeshBuilder::GetInstance()->GetMesh("DShip")->textureID = LoadTGA("Image//DShip.tga");
 
+	SoundManager::GetInstance()->playMusic("Sound/BGM.mp3");
+    
     // Set up the Spatial Partition and pass it to the EntityManager to manage
-    CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);
-    //CSpatialPartition::GetInstance()->SetMesh("GRIDMESH");
+    CSpatialPartition::GetInstance()->Init(800, 800, 800, 4, 4, 4);
+    //CSpatialPartition::GetInstance()->SetMesh("CUBEMESH", "CUBEMESH2");
     CSpatialPartition::GetInstance()->SetCamera(&camera);
     CSpatialPartition::GetInstance()->SetLevelOfDetails(40000.0f, 160000.0f);
     EntityManager::GetInstance()->SetSpatialPartition(CSpatialPartition::GetInstance());
 
+    //// Set up the Spatial Partition and pass it to the EntityManager to manage
+    //CSpatialPartition::GetInstance()->Init(250, 250, 250, 4, 4, 4);
+    //CSpatialPartition::GetInstance()->SetMesh("CUBEMESH", "CUBEMESH2");
+    //CSpatialPartition::GetInstance()->SetCamera(&camera);
+    //CSpatialPartition::GetInstance()->SetLevelOfDetails(40000.0f, 160000.0f);
+    //EntityManager::GetInstance()->SetSpatialPartition(CSpatialPartition::GetInstance());
+
 	// Create entities into the scene
 	Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
 	Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
-	GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
-    aCube->SetCollider(true);
-    aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
-    aCube->InitLOD("cube", "sphere", "cubeSG");
-	aCube->ShowAABB = true;
+	//GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
+ //   aCube->SetCollider(true);
+ //   aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+ //   aCube->InitLOD("cube", "sphere", "cubeSG");
+	//aCube->ShowAABB = true;
 
     //// Add the pointer to this new entity to the Scene Graph
     //CSceneNode* theNode = CSceneGraph::GetInstance()->AddNode(aCube);
@@ -247,9 +266,8 @@ void SceneText::Init()
     //aRotateMtx->SetSteps(-120, 60);
     //grandchildNode->SetUpdateTransformation(aRotateMtx);
 
-    // Create a CEnemy instance
-    theEnemy = new CEnemy();
-    theEnemy->Init();
+    //CUpgrade* upgrade = new CUpgrade();
+    //upgrade->Init("GRIDMESH");
 
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
     // Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
@@ -266,15 +284,7 @@ void SceneText::Init()
 	////playerInfo->SetTerrain(groundEntity);
     //theEnemy->SetTerrain(groundEntity);
 
-	//Spawning of asteroid
-	for (int i = 0; i < 50; i++)
-	{
-		Asteroid* asteroids = new Asteroid();
-		asteroids->Init();
-	}
-
-	base = new Base();
-	base->Init();
+    EntitySpawn = new CSpawn();
 
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
@@ -291,6 +301,16 @@ void SceneText::Init()
 
 	LMG = Create::Sprite2DObject("MachinegunL", Vector3(0, 0, 0), Vector3(halfWindowWidth + 150, halfWindowHeight + 150, 1));
 	RMG = Create::Sprite2DObject("MachinegunR", Vector3(0, 0, 0), Vector3(halfWindowWidth + 150, halfWindowHeight + 150, 1));
+
+	//Spawning of asteroid
+	//for (int i = 0; i < 50; i++)
+	//{
+	//	Asteroid* asteroids = new Asteroid();
+	//	asteroids->Init();
+	//}
+
+	Base* base = new Base();
+	base->Init();
 
 	HP_Scale = (float) (playerInfo->GetHP() * 4);
 	HP_Bar = Create::Sprite2DObject("HP", Vector3(0, halfWindowHeight - 35, 0), Vector3(HP_Scale, 20, 1));
@@ -368,6 +388,10 @@ void SceneText::Update(double dt)
 
 	// Update the player position and other details based on keyboard and mouse inputs
 	playerInfo->Update(dt);
+
+    // Spawner
+    if (EntitySpawn->GetIsWaveCleared())
+        EntitySpawn->Spawner();
 
 	//camera.Update(dt); // Can put the camera into an entity rather than here (Then we don't have to write this)
 

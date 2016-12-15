@@ -15,61 +15,61 @@ class Mesh;
 class CGrid
 {
 protected:
-	// We use a Vector3 to store the indices of this Grid within the Spatial Partition array.
-	Vector3 index;
-	// We use a Vector3 to store the size of this Grid within the Spatial Partition array.
-	Vector3 size;
-	// We use a Vector3 to store the x- and z-offset of this Grid.
-	Vector3 offset;
-	// We use a Vector3 to store the x- and z-offset of this Grid.
-	Vector3 min, max;
+    // We use a Vector3 to store the indices of this Grid within the Spatial Partition array.
+    Vector3 index;
+    // We use a Vector3 to store the size of this Grid within the Spatial Partition array.
+    Vector3 size;
+    // We use a Vector3 to store the x- and z-offset of this Grid.
+    Vector3 offset;
+    // We use a Vector3 to store the x- and z-offset of this Grid.
+    Vector3 min, max;
 
-	// The mesh to represent the grid
-	Mesh* theMesh;
+    // The mesh to represent the grid
+    Mesh* theMesh;
 
-	// List of objects in this grid
-	vector<EntityBase*> ListOfObjects;
+    // List of objects in this grid
+    vector<EntityBase*> ListOfObjects;
 
     // The level of detail for this CGrid
     CLevelOfDetails::DETAIL_LEVEL theDetailLevel;
 
 public:
-	// Constructor
-	CGrid(void);
-	// Destructor
-	~CGrid(void);
+    // Constructor
+    CGrid(void);
+    // Destructor
+    ~CGrid(void);
 
-	// Init
-	void Init(	const int xIndex, const int zIndex, 
-				const int xGridSize, const int zGridSize,
-				const float xOffset = 0, const float zOffset = 0);
+    // Init
+    void Init(const int xIndex, const int yIndex, const int zIndex,
+        const int xGridSize, const int yGridSize, const int zGridSize,
+        const float xOffset = 0, const float yOffset = 0, const float zOffset = 0);
 
-	// Set a particular grid's Mesh
-	void SetMesh(const std::string& _meshName);
+    // Set a particular grid's Mesh
+    void SetMesh(const std::string& _meshName);
 
-	// Update the grid
-	void Update(vector<EntityBase*>* migrationList);
-	// Render the grid
-	void Render(void);
-	// RenderObjects
-	void RenderObjects(const int RESOLUTION);
+    // Update the grid
+    void Update(vector<EntityBase*>* migrationList);
+    // Render the grid
+    void Render(void);
+    // RenderObjects
+    void RenderObjects(const int RESOLUTION);
 
-	// Add a new object to this grid
-	void Add(EntityBase* theObject);
-	// Remove but not delete all objects from this grid
-	void Remove(void);
-	// Remove but not delete an object from this grid
-	bool Remove(EntityBase* theObject);
+    // Add a new object to this grid
+    void Add(EntityBase* theObject);
+    // Remove but not delete all objects from this grid
+    void Remove(void);
+    // Remove but not delete an object from this grid
+    bool Remove(EntityBase* theObject);
 
-	// Check if an object is in this grid
-	bool IsHere(EntityBase* theObject) const;
+    // Check if an object is in this grid
+    bool IsHere(EntityBase* theObject) const;
 
-	// Get list of objects in this grid
-	vector<EntityBase*> GetListOfObject(void);
+    // Get list of objects in this grid
+    vector<EntityBase*> GetListOfObject(void);
 
     // Set the Level of Detail for objects in this CGrid
     void SetDetailLevel(const CLevelOfDetails::DETAIL_LEVEL theDetailLevel);
 
-	// PrintSelf
-	void PrintSelf();
+    // PrintSelf
+    void PrintSelf();
 };

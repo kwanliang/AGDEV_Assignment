@@ -5,7 +5,7 @@
 #include "RenderHelper.h"
 
 SkyBoxEntity::SkyBoxEntity(void)
-	: size(1000.0f, 1000.0f, 1000.0f)
+    : size(4000.0f, 4000.0f, 4000.0f)
 	, m_bBoundaryDefined(false)
 {
 }
@@ -23,6 +23,9 @@ void SkyBoxEntity::Render()
 {
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
+    modelStack.Translate(-CSpatialPartition::GetInstance()->GetOffset().x,
+        -CSpatialPartition::GetInstance()->GetOffset().y,
+        -CSpatialPartition::GetInstance()->GetOffset().z);
 
 		// Front
 		modelStack.PushMatrix();

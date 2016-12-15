@@ -37,6 +37,24 @@
     <Filter Include="Enemy">
       <UniqueIdentifier>{b90d843d-5b19-4b8a-8c31-0239ce073764}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Asteroid">
+      <UniqueIdentifier>{53640858-0264-4d17-b0e2-7b0a136788d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Upgrade">
+      <UniqueIdentifier>{443edf08-1b20-4b19-9f77-c62cfffb4861}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minimap">
+      <UniqueIdentifier>{b83c52ba-4d1d-4521-a45a-192c32b1bdd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GOAP">
+      <UniqueIdentifier>{7f38a7b2-f214-4a85-9451-21e5dba8df8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base">
+      <UniqueIdentifier>{dc90b9b2-6b8d-4bd6-8b9b-16b021bf720b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Spawn">
+      <UniqueIdentifier>{62ec4a01-7d3f-45ff-958b-05afb1cd3d05}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -102,12 +120,6 @@
     <ClCompile Include="Source\SceneGraph\UpdateTransformation.cpp">
       <Filter>SceneGraph</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SpatialPartition\Grid.cpp">
-      <Filter>SpatialPartition</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SpatialPartition\SpatialPartition.cpp">
-      <Filter>SpatialPartition</Filter>
-    </ClCompile>
     <ClCompile Include="Source\WeaponInfo\GrenadeThrow.cpp">
       <Filter>WeaponInfo</Filter>
     </ClCompile>
@@ -120,7 +132,40 @@
     <ClCompile Include="Source\LevelOfDetails\LevelOfDetails.cpp">
       <Filter>LevelOfDetails</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Enemy\Enemy.cpp">
+    <ClCompile Include="Source\Asteroid\Asteroid.cpp">
+      <Filter>Asteroid</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\DShip.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Upgrade\Upgrade.cpp">
+      <Filter>Upgrade</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Minimap\Minimap.cpp">
+      <Filter>Minimap</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GOAP\GOAP.cpp">
+      <Filter>GOAP</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Base\Base.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\WeaponInfo\MachineGun.cpp">
+      <Filter>WeaponInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SpatialPartition\Grid.cpp">
+      <Filter>SpatialPartition</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SpatialPartition\SpatialPartition.cpp">
+      <Filter>SpatialPartition</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Spawn\Spawn.cpp">
+      <Filter>Spawn</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Upgrade\Fighter.cpp">
+      <Filter>Upgrade</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Drone.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
   </ItemGroup>
@@ -185,12 +230,6 @@
     <ClInclude Include="Source\SceneGraph\UpdateTransformation.h">
       <Filter>SceneGraph</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SpatialPartition\Grid.h">
-      <Filter>SpatialPartition</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SpatialPartition\SpatialPartition.h">
-      <Filter>SpatialPartition</Filter>
-    </ClInclude>
     <ClInclude Include="Source\WeaponInfo\GrenadeThrow.h">
       <Filter>WeaponInfo</Filter>
     </ClInclude>
@@ -203,7 +242,40 @@
     <ClInclude Include="Source\LevelOfDetails\LevelOfDetails.h">
       <Filter>LevelOfDetails</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Enemy\Enemy.h">
+    <ClInclude Include="Source\Asteroid\Asteroid.h">
+      <Filter>Asteroid</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\DShip.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Upgrade\Upgrade.h">
+      <Filter>Upgrade</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Minimap\Minimap.h">
+      <Filter>Minimap</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GOAP\GOAP.h">
+      <Filter>GOAP</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Base\Base.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WeaponInfo\MachineGun.h">
+      <Filter>WeaponInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SpatialPartition\Grid.h">
+      <Filter>SpatialPartition</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SpatialPartition\SpatialPartition.h">
+      <Filter>SpatialPartition</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Spawn\Spawn.h">
+      <Filter>Spawn</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Upgrade\Fighter.h">
+      <Filter>Upgrade</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Drone.h">
       <Filter>Enemy</Filter>
     </ClInclude>
   </ItemGroup>

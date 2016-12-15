@@ -11,7 +11,7 @@ class Base : public GenericEntity
 {
 private:
 	Vector3 direction;
-	bool active;
+    int m_HP;
 
 public:
 	Base(void);
@@ -20,6 +20,10 @@ public:
 	void Init(void);
 	void Update(double dt);
 	void Render(void);
+
+    // HP
+    void SetHP(int m_HP);
+    int GetHP(void);
 };
 
 #endif
