@@ -24,6 +24,7 @@ public:
     void SetSpatialPartition(CSpatialPartition* theSpatialPartition);
 
 	std::list<EntityBase*> entityList;
+	std::list<EntityBase*> UIList;
 
 	std::vector<Vector3> spawnPos;
 

@@ -96,6 +96,15 @@ public:
 	void AttachCamera(FPSCamera* _cameraPtr);
 	void DetachCamera();
 
+	int GetHP(void) const;
+	void DamageHP(int amount);
+	void RepairHP(int amount);
+
+	//CWeaponInfo* GetPrimaryWeapon(void) ;
+	//CWeaponInfo* GetSecondaryWeapon(void);	
+	CWeaponInfo* primaryWeapon;
+	CWeaponInfo* secondaryWeapon;
+
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 position, target, up;
@@ -108,6 +117,9 @@ private:
 	//Vector3 vel;
 	//Vector3 acceleration;
 	//double resistance_factor;
+
+	const int MAX_HP;
+	int HP;
 
 	double m_dSpeed;
 	double m_dAcceleration;
@@ -128,6 +140,5 @@ private:
 	FPSCamera* attachedCamera;
 
 	Vector3 offset;
-	CWeaponInfo* primaryWeapon;
-	CWeaponInfo* secondaryWeapon;
+
 };

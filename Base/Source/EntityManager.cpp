@@ -377,7 +377,7 @@ bool EntityManager::CheckForCollision(void)
 										Asteroid *thisAsteroid = dynamic_cast<Asteroid*>(*colliderThis);
 
 										//HIT BIG ASTEROID
-										if (!thisAsteroid->small)
+										if (!thisAsteroid->mini)
 										{
 											//Split stores position of big asteroid to spawnPos;
 											thisAsteroid->Split();
@@ -386,7 +386,7 @@ bool EntityManager::CheckForCollision(void)
 										}
 
 										//HIT SMALL ASTEROID
-										if (thisAsteroid->small)
+										if (thisAsteroid->mini)
 										{
 											thatEntity->SetIsDone(true);
 											thisEntity->SetIsDone(true);
@@ -407,23 +407,23 @@ bool EntityManager::CheckForCollision(void)
 										Asteroid *thatAsteroid = dynamic_cast<Asteroid*>(*colliderThat);
 
 										//Two small asteroid collide = Both destroyed
-										if (thisAsteroid->small && thatAsteroid->small)
+										if (thisAsteroid->mini && thatAsteroid->mini)
 										{
 											thisEntity->SetIsDone(true);
 											thatEntity->SetIsDone(true);
 										}
 										//Small asteroid collide with Big asteroid = Small destroyed
-										else if (thisAsteroid->small && !thatAsteroid->small)
+										else if (thisAsteroid->mini && !thatAsteroid->mini)
 										{
 											thisEntity->SetIsDone(true);
 										}
 										//Small asteroid collide with Big asteroid = Small destroyed
-										else if (!thisAsteroid->small && thatAsteroid->small)
+										else if (!thisAsteroid->mini && thatAsteroid->mini)
 										{
 											thatEntity->SetIsDone(true);
 										}
 										//Two Big asteroid collide = Both Split
-										if (!thisAsteroid->small && !thatAsteroid->small)
+										if (!thisAsteroid->mini && !thatAsteroid->mini)
 										{
 											thisAsteroid->Split();
 											thatAsteroid->Split();
@@ -466,7 +466,7 @@ void EntityManager::SpawnAss(Vector3 pos)
 {
 	Asteroid * new_asteroid = new Asteroid();
 
-	new_asteroid->small = true;
+	new_asteroid->mini = true;
 
 	new_asteroid->SetPosition(pos);
 	new_asteroid->direction.SetZero();

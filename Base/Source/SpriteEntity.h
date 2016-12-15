@@ -34,10 +34,12 @@ public:
 	inline void SetTextRenderMode(SPRITE_RENDERMODE _mode){ mode = _mode; };
 
 private:
-	Vector3 position;
-	Vector3 scale;
 	Mesh* modelMesh;
 	SPRITE_RENDERMODE mode;
+
+protected:
+	Vector3 position;
+	Vector3 scale;
 };
 
 namespace Create

@@ -42,6 +42,7 @@ SceneText::~SceneText()
 
 void SceneText::Init()
 {
+	glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
 	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Texture.vertexshader", "Shader//Texture.fragmentshader");
 	
 	// Tell the shader program to store these uniform locations
@@ -122,7 +123,6 @@ void SceneText::Init()
 
 	// Load all the meshes
 	MeshBuilder::GetInstance()->GenerateAxes("reference");
-	MeshBuilder::GetInstance()->GenerateCrossHair("crosshair");
 	MeshBuilder::GetInstance()->GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("quad")->textureID = LoadTGA("Image//calibri.tga");
 	MeshBuilder::GetInstance()->GenerateText("text", 16, 16);
@@ -173,6 +173,19 @@ void SceneText::Init()
 
 	MeshBuilder::GetInstance()->GenerateOBJ("Base1", "OBJ//Base//base.obj");
 	MeshBuilder::GetInstance()->GetMesh("Base1")->textureID = LoadTGA("Image//Base//base.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("crosshair", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("crosshair")->textureID = LoadTGA("Image//crosshair.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("HP", Color(0, 1, 0), 1.f);
+	MeshBuilder::GetInstance()->GenerateQuad("HUD", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("HUD")->textureID = LoadTGA("Image//HUD.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("Minimap", Color(1.0f, 1.0f, 1.0f), 1.0f);
+	MeshBuilder::GetInstance()->GetMesh("Minimap")->textureID = LoadTGA("Image//minimap_bg.tga");
+	MeshBuilder::GetInstance()->GenerateMinimapBorder("Border", Color(1.0f, 1.0f, 1.0f), 1.0f);
+	MeshBuilder::GetInstance()->GenerateCircle("Player", Color(0.0f, 1.0f, 0.0f), 1.0f);
+	MeshBuilder::GetInstance()->GenerateCircle("Enemy", Color(1.0f, 0.0f, 0.0f), 1.0f);
+
+	//MeshBuilder::G
 
     // Set up the Spatial Partition and pass it to the EntityManager to manage
     CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);
@@ -229,7 +242,7 @@ void SceneText::Init()
 
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
     // Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
-	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f));
+	SpriteEntity* crosshair = Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 1.0f), Vector3(150.0f, 150.0f, 150.0f));
 
 	SkyBoxEntity* theSkyBox = Create::SkyBox("SKYBOX_FRONT", "SKYBOX_BACK",
 											 "SKYBOX_LEFT", "SKYBOX_RIGHT",
@@ -247,11 +260,13 @@ void SceneText::Init()
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	float fontSize = 25.0f;
 	float halfFontSize = fontSize / 2.0f;
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 10; ++i)
 	{
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f,1.0f,0.0f));
 	}
-	textObj[0]->SetText("HELLO WORLD");
+	//textObj[0]->SetText("HELLO WORLD");
+	textObj[4]->SetText("HP");
+	textObj[4]->SetPosition(Vector3(-15, halfWindowHeight - 15, 0.0f));
 
 	//Spawning of asteroid
 	for (int i = 0; i < 50; i++)
@@ -262,6 +277,13 @@ void SceneText::Init()
 
 	Base* base = new Base();
 	base->Init();
+
+	HP_Scale = (float) (playerInfo->GetHP() * 4);
+	HP_Bar = Create::Sprite2DObject("HP", Vector3(0, halfWindowHeight - 35, 0), Vector3(HP_Scale, 20, 1));
+	SpriteEntity* HUD = Create::Sprite2DObject("HUD", Vector3(0, 0, 0), Vector3(halfWindowWidth * 2, halfWindowHeight * 2, 1));
+	
+	Minimap* minimap = new Minimap();
+	minimap->Init();
 }
 
 void SceneText::Update(double dt)
@@ -339,17 +361,49 @@ void SceneText::Update(double dt)
 
 	// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P
 	// Eg. FPSRenderEntity or inside RenderUI for LightEntity
-	std::ostringstream ss;
-	ss.precision(5);
-	float fps = (float)(1.f / dt);
-	ss << "FPS: " << fps;
-	textObj[1]->SetText(ss.str());
 
-	std::ostringstream ss1;
-	ss1.precision(4);
-	ss1 << "Player:" << playerInfo->GetPos();
-	textObj[2]->SetText(ss1.str());
+	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
+	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
+
+	std::ostringstream ss;
+	ss.precision(3);
+	float fps = (float)(1.f / dt);
+	ss << "FPS:" << fps;
+	textObj[0]->SetText(ss.str());
+	textObj[0]->SetPosition(Vector3(-halfWindowWidth, halfWindowHeight -10 , 0.0f));
+
+	//POS
+	ss.str("");
+	ss.precision(4);
+	ss << "X:" << playerInfo->GetPos().x;
+	textObj[1]->SetText(ss.str());
+	textObj[1]->SetPosition(Vector3(-halfWindowWidth + 10, halfWindowHeight - 40, 0.0f));
+	ss.str("");
+	ss << "Y:" << playerInfo->GetPos().y;
+	textObj[2]->SetText(ss.str());
+	textObj[2]->SetPosition(Vector3(-halfWindowWidth + 10, halfWindowHeight - 60, 0.0f));
+	ss.str("");
+	ss << "Z:" << playerInfo->GetPos().z;
+	textObj[3]->SetText(ss.str());
+	textObj[3]->SetPosition(Vector3(-halfWindowWidth + 10, halfWindowHeight - 80, 0.0f));
+
+	//UI ELEMENTS
+	HP_Scale = (float)(playerInfo->GetHP() * 4);
+	HP_Bar->SetScale(Vector3(HP_Scale, 20, 1));
+
+	std::ostringstream UI;
+	UI << "MG:" <<  playerInfo->primaryWeapon->GetMagRound() << "/" << playerInfo->primaryWeapon->GetMaxMagRound();
+	textObj[5]->SetText(UI.str());
+	textObj[5]->SetPosition(Vector3(0 + 150, -halfWindowHeight + 50, 0.0f));
+	textObj[5]->SetAngle(15.0f);
+
+	UI.str("");
+	UI << "MSL:" << playerInfo->secondaryWeapon->GetMagRound() << "/" << playerInfo->secondaryWeapon->GetMaxMagRound();
+	textObj[6]->SetText(UI.str());
+	textObj[6]->SetPosition(Vector3(0 + 150, -halfWindowHeight + 30, 0.0f));
+	textObj[6]->SetAngle(15.0f);
 }
+
 
 void SceneText::Render()
 {

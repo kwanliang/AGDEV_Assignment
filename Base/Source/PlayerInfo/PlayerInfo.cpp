@@ -29,6 +29,7 @@ CPlayerInfo::CPlayerInfo(void)
 	, secondaryWeapon(NULL)
 	, m_boost(FALSE)
 	, boostMultiplier(2.0)
+	, MAX_HP(100)
 	//, timer(1.0)
 {
 }
@@ -51,6 +52,8 @@ CPlayerInfo::~CPlayerInfo(void)
 // Initialise this class instance
 void CPlayerInfo::Init(void)
 {
+	HP = MAX_HP;
+
 	// Set the default values
 	defaultPosition.Set(0,0,10);
 	defaultTarget.Set(0,0,0);
@@ -67,7 +70,7 @@ void CPlayerInfo::Init(void)
 	maxBoundary.Set(1,1,1);
 	minBoundary.Set(-1, -1, -1);
 	
-	offset.SetZero();
+	offset.Set(2, -1, 0);
 
 	// Set the pistol as the primary weapon
 	//primaryWeapon = new CPistol();
@@ -309,6 +312,8 @@ void CPlayerInfo::Update(double dt)
 			rightUV.y = 0;
 			rightUV.Normalize();
 			up = rightUV.Cross(viewUV).Normalized();
+
+			offset = rotation * offset;
 		}
 		{
 			float pitch = (float)(-m_dSpeed * camera_pitch * (float)dt);
@@ -568,7 +573,7 @@ void CPlayerInfo::Update(double dt)
 	{
 		if (primaryWeapon)
 		{
-			primaryWeapon->Reload();
+			primaryWeapon->Reload(true);
 			//primaryWeapon->PrintSelf();
 		}
         if (secondaryWeapon)
@@ -586,12 +591,13 @@ void CPlayerInfo::Update(double dt)
 	if (MouseController::GetInstance()->IsButtonDown(MouseController::LMB))
 	{
 		if (primaryWeapon)
-			primaryWeapon->Discharge(position + offset, target, this);
+			primaryWeapon->Discharge(position + offset, target + offset, this);
 	}
 	else if (MouseController::GetInstance()->IsButtonPressed(MouseController::RMB))
 	{
+		//DamageHP(10);
         if (secondaryWeapon)
-			secondaryWeapon->Discharge(position + offset, target, this);
+			secondaryWeapon->Discharge(position + offset, target + offset, this);
 	}
 
 	// If the user presses R key, then reset the view to default values
@@ -649,4 +655,33 @@ void CPlayerInfo::AttachCamera(FPSCamera* _cameraPtr)
 void CPlayerInfo::DetachCamera()
 {
 	attachedCamera = nullptr;
+}
+
+int CPlayerInfo::GetHP(void) const
+{
+	return HP;
+}
+
+void CPlayerInfo::DamageHP(int amount)
+{
+	if (HP > 0)
+	{
+		HP -= amount;
+	}
+	else
+	{
+		HP = 0;
+	}
+}
+
+void CPlayerInfo::RepairHP(int amount)
+{
+	if (HP < MAX_HP)
+	{
+		HP += amount;
+	}
+	else
+	{
+		HP = MAX_HP;
+	}
 }

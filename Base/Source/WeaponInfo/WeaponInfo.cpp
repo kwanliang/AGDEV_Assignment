@@ -161,19 +161,27 @@ void CWeaponInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _sour
 }
 
 // Reload this weapon
-void CWeaponInfo::Reload(void)
+void CWeaponInfo::Reload(bool infinite)
 {
 	if (magRounds < maxMagRounds)
 	{
-		if (maxMagRounds - magRounds <= totalRounds)
+		if (infinite)
 		{
-			totalRounds -= maxMagRounds - magRounds;
 			magRounds = maxMagRounds;
+
 		}
 		else
 		{
-			magRounds += totalRounds;
-			totalRounds = 0;
+			if (maxMagRounds - magRounds <= totalRounds)
+			{
+				totalRounds -= maxMagRounds - magRounds;
+				magRounds = maxMagRounds;
+			}
+			else
+			{
+				magRounds += totalRounds;
+				totalRounds = 0;
+			}
 		}
 	}
 }

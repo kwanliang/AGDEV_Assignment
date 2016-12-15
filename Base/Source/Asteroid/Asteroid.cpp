@@ -24,7 +24,7 @@ void Asteroid::Init(void)
 
 	speed = (double)Math::RandFloatMinMax(-15, 15);
 
-	small = false;
+	mini = false;
 
 	ShowAABB = true;
 	SetCollider(true);

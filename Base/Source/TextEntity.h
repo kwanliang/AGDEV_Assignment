@@ -28,6 +28,12 @@ public:
 	inline void SetPosition(const Vector3& _value){ position = _value; };
 	inline Vector3 GetPosition(){ return position; };
 
+	inline void SetAngle(const float& _value){ angle = _value; };
+	inline float GetAngle(){ return angle; };
+
+	inline void SetRotation(const Vector3& _value){ rotation = _value; };
+	inline Vector3 GetRotation(){ return rotation; };
+
 	inline void SetScale(const Vector3& _value){ scale = _value; };
 	inline Vector3 GetScale(){ return scale; };
 
@@ -39,6 +45,8 @@ public:
 
 private:
 	Vector3 position;
+	float angle;
+	Vector3 rotation;
 	Vector3 scale;
 	Mesh* modelMesh;
 	std::string text;

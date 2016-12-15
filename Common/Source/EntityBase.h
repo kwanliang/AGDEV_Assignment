@@ -11,7 +11,6 @@ public:
         DEFAULT,
         ENEMY,
 		ASTEROID,
-		SMALL_ASTEROID,
 		BASE,
         NUM_ENTITYTYPE
     };

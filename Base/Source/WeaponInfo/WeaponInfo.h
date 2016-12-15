@@ -65,7 +65,7 @@ public:
 	// Discharge this weapon
 	virtual void Discharge(Vector3 position, Vector3 target, CPlayerInfo* _source = NULL);
 	// Reload this weapon
-	void Reload(void);
+	void Reload(bool infinite = false);
 	// Add rounds
 	void AddRounds(const int newRounds);
 

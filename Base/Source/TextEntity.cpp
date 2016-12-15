@@ -7,6 +7,8 @@
 TextEntity::TextEntity(Mesh* _modelMesh, const std::string& _text, const Color& _color) :
 modelMesh(_modelMesh),
 position(0.0f, 0.0f, 0.0f),
+angle(0.0f),
+rotation(0.0f, 0.0f, 1.0f),
 scale(1.0f, 1.0f, 1.0f),
 text(_text),
 mode(MODE_2D),
@@ -44,6 +46,7 @@ void TextEntity::RenderUI()
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
 	modelStack.Translate(position.x, position.y, position.z);
+	modelStack.Rotate(angle, rotation.x, rotation.y, rotation.z);
 	modelStack.Scale(scale.x, scale.y, scale.z);
 	RenderHelper::RenderText(modelMesh, text, color);
 	modelStack.PopMatrix();

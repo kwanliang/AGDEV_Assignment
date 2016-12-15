@@ -282,6 +282,56 @@ Mesh* MeshBuilder::GenerateCube(const std::string &meshName, Color color, float 
 	return mesh;
 }
 
+Mesh* MeshBuilder::GenerateCircle(const std::string &meshName, Color color, float)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+
+	float yPos = 0.0f;
+	float xPos = 0.0f;
+
+	v.pos.Set(0, 0, 0);
+	v.color = color;
+	v.texCoord.Set(0, 0);
+	vertex_buffer_data.push_back(v);
+
+	for (int i = 0; i < 36; ++i)
+	{
+		yPos = sin(Math::DegreeToRadian(i * 10)) * 0.5f;
+		xPos = cos(Math::DegreeToRadian(i * 10)) * 0.5f;
+
+		v.pos.Set(xPos, yPos, 0);
+		v.color = color;
+		v.texCoord.Set(xPos, yPos);
+		vertex_buffer_data.push_back(v);
+	}
+
+	//index buffer
+	for (size_t i = 1; i <= 36; ++i)
+	{
+		if (i + 1 > 36)
+			index_buffer_data.push_back(1);
+		else
+			index_buffer_data.push_back(i + 1);
+
+		index_buffer_data.push_back(0);
+		index_buffer_data.push_back(i);
+	}
+
+	Mesh *mesh = new Mesh(meshName);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_TRIANGLES;
+
+	AddMesh(meshName, mesh);
+
+	return mesh;
+}
+
 Mesh* MeshBuilder::GenerateRing(const std::string &meshName, Color color, unsigned numSlice, float outerR, float innerR)
 {
 	std::vector<Vertex> vertex_buffer_data;
@@ -555,6 +605,48 @@ Mesh* MeshBuilder::GenerateRay(const std::string &meshName, const float length)
     AddMesh(meshName, mesh);
 
     return mesh;
+}
+
+Mesh* MeshBuilder::GenerateMinimapBorder(const std::string &meshName, Color color, float length)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+
+	float yPos = 0.0f;
+	float xPos = 0.0f;
+
+	for (int i = 0; i < 36; ++i)
+	{
+		yPos = sin(Math::DegreeToRadian(i * 10)) * 0.5f;
+		xPos = cos(Math::DegreeToRadian(i * 10)) * 0.5f;
+
+		v.pos.Set(xPos, yPos, 0);
+		v.color = color;
+		vertex_buffer_data.push_back(v);
+	}
+
+	//index buffer
+	for (size_t i = 0; i < 36; ++i)
+	{
+		index_buffer_data.push_back(i);
+		if (i + 1 < 36)
+			index_buffer_data.push_back(i + 1);
+		else
+			index_buffer_data.push_back(0);
+	}
+
+	Mesh *mesh = new Mesh(meshName);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_LINES;
+
+	AddMesh(meshName, mesh);
+
+	return mesh;
 }
 
 Mesh* MeshBuilder::GetMesh(const std::string& _meshName)

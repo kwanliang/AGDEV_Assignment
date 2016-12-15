@@ -21,7 +21,7 @@ public:
 
 	Vector3 direction;
 	
-	bool small;
+	bool mini;
 	double speed;
 	bool ShowAABB = false;
 };

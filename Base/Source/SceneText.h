@@ -13,6 +13,7 @@
 #include "Enemy/Enemy.h"
 #include "Asteroid\Asteroid.h"
 #include "Base\Base.h"
+#include "Minimap\Minimap.h"
 
 class ShaderProgram;
 class SceneManager;
@@ -36,11 +37,14 @@ private:
 	CPlayerInfo* playerInfo;
 	GroundEntity* groundEntity;
 	FPSCamera camera;
-	TextEntity* textObj[3];
+	TextEntity* textObj[10];
 	Light* lights[2];
 
 	GenericEntity* theCube;
     CEnemy* theEnemy;
+
+	SpriteEntity* HP_Bar;
+	float HP_Scale;
 
 	static SceneText* sInstance; // The pointer to the object that gets registered
 };
